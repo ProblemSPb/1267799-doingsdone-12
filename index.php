@@ -13,6 +13,17 @@ $tasks = [
     ['Заказать пиццу', null, 'Домашние дела', false]
 ];
 
+// функция подсчета количества тасок в проекте
+function countTasks($tasks, $project_name) {
+    $counter = 0;
+    foreach($tasks as $task){
+        if($task[2] === $project_name){
+            $counter++;
+        }
+    }
+    return $counter;
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -53,12 +64,12 @@ $tasks = [
                 <section class="content__side">
                     <h2 class="content__side-heading">Проекты</h2>
 
-                    <?php foreach($tasks as $task): ?>
+                    <?php foreach($projects as $project): ?>
                     <nav class="main-navigation">
                         <ul class="main-navigation__list">
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="#"><?= $task[0]; ?></a>
-                                <span class="main-navigation__list-item-count">0</span>
+                                <a class="main-navigation__list-item-link" href="#"><?= $project; ?></a>
+                                <span class="main-navigation__list-item-count"><?= countTasks($tasks, $project);?></span>
                             </li>
                         </ul>
                     </nav>
