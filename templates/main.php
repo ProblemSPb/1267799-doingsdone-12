@@ -26,7 +26,7 @@
         if($task[3] && $show_complete_tasks === 0)
         continue
         ;?>
-        <tr class="tasks__item task <?= ($task['3']) ? 'task--completed' : ''; ?> ">
+        <tr class="tasks__item task <?= ($task['3']) ? 'task--completed' : ''; ?> <?= (count_time_diff($task[1]) <= 1) ? 'task--important' : ''; ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?= ($task['3']) ? 'checked' : ''; ?>>
