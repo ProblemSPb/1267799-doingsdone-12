@@ -22,15 +22,15 @@
     </div>
 
     <table class="tasks">
-    <?php foreach($tasks as $task):
-        if($task[3] && $show_complete_tasks === 0)
+    <?php foreach($tasks as $key => $value):
+        if($value['status'] && $show_complete_tasks === 0)
         continue
         ;?>
-        <tr class="tasks__item task <?= ($task['3']) ? 'task--completed' : ''; ?> <?= (count_time_diff($task[1]) <= 1) ? 'task--important' : ''; ?>">
+        <tr class="tasks__item task <?= ($value['status']) ? 'task--completed' : ''; ?> <?= (count_time_diff($value['due_date']) <= 1) ? 'task--important' : ''; ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?= ($task['3']) ? 'checked' : ''; ?>>
-                    <span class="checkbox__text"> <?= $task[0];?> </span>
+                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?= ($value['status']) ? 'checked' : ''; ?>>
+                    <span class="checkbox__text"> <?= $value['name'];?> </span>
                 </label>
             </td>
 
@@ -38,7 +38,7 @@
                 <a class="download-link" href="#">Home.psd</a>
             </td>
 
-            <td class="task__date"><?= $task[1]?></td>
+            <td class="task__date"><?= $value['due_date']?></td>
         </tr>
     <?php endforeach; ?>
         <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->

@@ -36,12 +36,12 @@
                 <section class="content__side">
                     <h2 class="content__side-heading">Projects</h2>
 
-                    <?php foreach($projects as $project): ?>
+                    <?php foreach($projects as $key => $value): ?>
                     <nav class="main-navigation">
                         <ul class="main-navigation__list">
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="#"><?= $project; ?></a>
-                                <span class="main-navigation__list-item-count"><?= countTasks($tasks, $project);?></span>
+                                <a class="main-navigation__list-item-link" href="#"><?= $value['name']; ?></a>
+                                <span class="main-navigation__list-item-count"><?= countTasks($tasks, $value['name']);?></span>
                             </li>
                         </ul>
                     </nav>

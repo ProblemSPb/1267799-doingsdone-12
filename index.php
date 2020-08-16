@@ -1,32 +1,42 @@
 <?php
 
 require_once('helpers.php');
+require_once('db.php');
 
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
 $title = "Doings Done";
 
-$projects = ['Inbox', 'Study', 'Work', 'Chores', 'Car'];
+// getting projects from DB
+$sql_project = "SELECT * FROM project";
+$sql_result = mysqli_query($con, $sql_project);
+// moving data into a multidimensional array
+$projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 
-$tasks = [
-    ['Job Interview', '17.08.2020', 'Work', false],
-    ['Do the tech test', '25.12.2020', 'Work', false],
-    ['Finish the first task', '21.12.2020', 'Study', true],
-    ['Meet the friend', '22.12.2020', 'Inbox', false],
-    ['Buy cat\'s food', null, 'Chores', false],
-    ['Cooking', null, 'Chores', false]
-];
+// getting tasks from DB
+$sql_task = "SELECT task.*, project.name as project_name
+            FROM task as task
+            JOIN project as project ON task.projectID = project.id";
+$sql_task_result = mysqli_query($con, $sql_task);
+$tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
 // function counts tasks in the project
 function countTasks($tasks, $project_name)
 {
     $counter = 0;
-    foreach ($tasks as $task) {
-        if ($task[2] === $project_name) {
+    // foreach ($tasks as $task) {
+    //     if ($task[2] === $project_name) {
+    //         $counter++;
+    //     }
+    // }
+
+    foreach($tasks as $key => $value) {
+        if($value['project_name'] === $project_name){
             $counter++;
         }
     }
+
     return $counter;
 }
 
