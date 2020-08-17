@@ -40,7 +40,7 @@
                     <nav class="main-navigation">
                         <ul class="main-navigation__list">
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="#"><?= $value['name']; ?></a>
+                                <a class="main-navigation__list-item-link <?= ($_GET['id'] === $value['id']) ? 'main-navigation__list-item--active' : ''; ?>" href="index.php?id=<?= $value['id']; ?>"><?= $value['name']; ?></a>
                                 <span class="main-navigation__list-item-count"><?= countTasks($tasks, $value['name']);?></span>
                             </li>
                         </ul>

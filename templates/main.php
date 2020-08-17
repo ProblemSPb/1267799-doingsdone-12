@@ -21,8 +21,10 @@
         </label>
     </div>
 
+    <div><?= $no_tasks; ?></div>
+
     <table class="tasks">
-    <?php foreach($tasks as $key => $value):
+    <?php foreach($tasks_by_project as $key => $value):
         if($value['status'] && $show_complete_tasks === 0)
         continue
         ;?>
@@ -41,17 +43,4 @@
             <td class="task__date"><?= $value['due_date']?></td>
         </tr>
     <?php endforeach; ?>
-        <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
-        <?php if ($show_complete_tasks === 1) : ?>
-            <tr class="tasks__item task task--completed">
-                <td class="task__select">
-                    <label class="checkbox task__checkbox">
-                        <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                        <span class="checkbox__text">Sign up for a course</span>
-                    </label>
-                </td>
-                <td class="task__date">10.10.2019</td>
-                <td class="task__controls"></td>
-            </tr>
-        <?php endif; ?>
     </table>

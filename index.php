@@ -8,8 +8,10 @@ $show_complete_tasks = rand(0, 1);
 
 $title = "Doings Done";
 
-// getting projects from DB
-$sql_project = "SELECT * FROM project";
+$userID = 1;
+
+// getting projects for left side menu from DB
+$sql_project = "SELECT * FROM project WHERE userID = $userID";
 $sql_result = mysqli_query($con, $sql_project);
 // moving data into a multidimensional array
 $projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
@@ -17,19 +19,32 @@ $projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 // getting tasks from DB
 $sql_task = "SELECT task.*, project.name as project_name
             FROM task as task
-            JOIN project as project ON task.projectID = project.id";
+            JOIN project as project ON task.projectID = project.id
+            WHERE task.userID = $userID";
 $sql_task_result = mysqli_query($con, $sql_task);
 $tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
+
+// if a project is selected, respective tasks are shown
+if (isset($_GET['id']) && $_GET['id']) {
+    $projectID = mysqli_real_escape_string($con, intval($_GET['id']));
+    $sql_task .= " AND projectID = $projectID ";
+}
+$sql_task_result = mysqli_query($con, $sql_task);
+
+// if no tasks in the project
+$no_tasks = '';
+if (!mysqli_num_rows($sql_task_result)) {
+    // http_response_code(404);
+    // exit();
+    $no_tasks = 'No tasks found';
+}
+$tasks_by_project = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
+
 
 // function counts tasks in the project
 function countTasks($tasks, $project_name)
 {
     $counter = 0;
-    // foreach ($tasks as $task) {
-    //     if ($task[2] === $project_name) {
-    //         $counter++;
-    //     }
-    // }
 
     foreach($tasks as $key => $value) {
         if($value['project_name'] === $project_name){
@@ -60,7 +75,9 @@ $content = include_template(
     [
         'tasks' => $tasks,
         'projects' => $projects,
-        'show_complete_tasks' => $show_complete_tasks
+        'show_complete_tasks' => $show_complete_tasks,
+        'tasks_by_project' => $tasks_by_project,
+        'no_tasks' => $no_tasks
     ]
 );
 
