@@ -46,8 +46,8 @@ function countTasks($tasks, $project_name)
 {
     $counter = 0;
 
-    foreach($tasks as $key => $value) {
-        if($value['project_name'] === $project_name){
+    foreach ($tasks as $key => $value) {
+        if ($value['project_name'] === $project_name) {
             $counter++;
         }
     }
@@ -68,7 +68,6 @@ function count_time_diff($dueDate)
     }
     return $diff;
 }
-
 
 $content = include_template(
     'main.php',

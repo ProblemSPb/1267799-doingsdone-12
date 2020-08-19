@@ -28,7 +28,7 @@
         if($value['status'] && $show_complete_tasks === 0)
         continue
         ;?>
-        <tr class="tasks__item task <?= ($value['status']) ? 'task--completed' : ''; ?> <?= (count_time_diff($value['due_date']) <= 1) ? 'task--important' : ''; ?>">
+        <tr class="tasks__item task <?= ($value['status']) ? 'task--completed' : ''; ?> <?= (count_time_diff($value['due_date']) <= 1 && $value['due_date'] != NULL) ? 'task--important' : ''; ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?= ($value['status']) ? 'checked' : ''; ?>>
@@ -37,7 +37,7 @@
             </td>
 
             <td class="task__file">
-                <a class="download-link" href="#">Home.psd</a>
+                <a class=" <?= ($value['file']) ? 'download-link' : ''; ?> " href="<?= $value['file']; ?>"><?= ($value['file']) ? substr($value['file'], 9) : ''; ?></a>
             </td>
 
             <td class="task__date"><?= $value['due_date']?></td>
