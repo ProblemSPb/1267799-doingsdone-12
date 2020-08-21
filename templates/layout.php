@@ -52,6 +52,7 @@
 
                 <main class="content__main">
                     <?= $content; ?>
+                    <br>
                 </main>
             </div>
         </div>

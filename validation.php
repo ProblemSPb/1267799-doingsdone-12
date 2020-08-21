@@ -14,7 +14,7 @@ function validateSize($field, $max)
     $validation = "";
 
     if (empty($field)) {
-        $validation = 'Task title cannot be empty';
+        $validation = 'Field cannot be empty';
     }
 
     if (strlen($field) > $max) {
@@ -60,4 +60,42 @@ function validateProject($value, $array)
     return $validation;
 }
 
+// validate email
+function validateEmail($email)
+{
+    $validation = "";
 
+    if (empty($email)) {
+        $validation = "Email field cannot be empty";
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $validation = "It's not a valid email";
+    }
+
+    return $validation;
+}
+
+// validate pass
+function validatePassword ($pass)
+{
+    $validation = "";
+
+    if (empty($pass)) {
+        $validation = "Password field cannot be empty";
+    }
+
+    if (strlen($pass) < 6) {
+        $validation = "Password should have at least 6 characters including numbers, upper- and lowercase letters";
+    }
+
+    if (strlen($pass) > 30) {
+        $validation = "Password should not be longer than 30 characters and have numbers, upper- and lowercase letters";
+    }
+
+    if (!((preg_match('/[A-Z]/', $pass)) && (preg_match('/[a-z]/', $pass)) && preg_match('/[0-9]/', $pass))) {
+        $validation = "Password should have numbers, upper- and lowercase letters";
+    }
+
+    return $validation;
+}
