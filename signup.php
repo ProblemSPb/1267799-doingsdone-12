@@ -1,8 +1,16 @@
 <?php
 
+session_start();
+
 require_once('helpers.php');
 require_once('db.php');
 require_once('validation.php');
+
+// if user already logged in
+if (isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+}
 
 $errors = [];
 
@@ -43,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = mysqli_stmt_execute($stmt);
 
         if ($result) {
-            header('Location: index.php');
+            header('Location: login.php');
         }
     }
 }

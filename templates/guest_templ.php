@@ -8,70 +8,33 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body>
+<body class="body-background">
   <h1 class="visually-hidden">Doings Done</h1>
 
   <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+    <div class="container">
       <header class="main-header">
         <a href="#">
           <img src="../img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
         </a>
 
         <div class="main-header__side">
-          <a class="main-header__side-item button button--transparent" href="login.php">Log In</a>
+          <a class="main-header__side-item button button--transparent" href="login.php">Log in</a>
         </div>
       </header>
 
       <div class="content">
-        <section class="content__side">
-          <p class="content__side-info">If you already have an account, log in</p>
+        <section class="welcome">
+          <h2 class="welcome__heading">Doings Done</h2>
 
-          <a class="button button--transparent content__side-button" href="login.php">Log in</a>
+          <div class="welcome__text">
+            <p>«Doings Done» is a web task manager. Plan and track your tasks.</p>
+
+            <p>After creating an account you cant start using Doings Done for free and organise your tasks by projects.</p>
+          </div>
+
+          <a class="welcome__button button" href="signup.php">Sign up</a>
         </section>
-
-        <main class="content__main">
-          <h2 class="content__main-heading">Sign up</h2>
-
-          <form class="form" action="signup.php" method="post" autocomplete="off">
-            <div class="form__row">
-              <label class="form__label" for="email">E-mail <sup>*</sup></label>
-
-              <input class="form__input <?= isset($errors['email']) ? "form__input--error" : ""; ?>" type="text" name="email" id="email" value="<?= getPOSTValue('email'); ?>" placeholder="Your email">
-
-              <?php if (isset($errors['email'])): ?>
-              <p class="form__message"><?= $errors['email']; ?></p>
-              <?php endif; ?>
-            </div>
-
-            <div class="form__row">
-              <label class="form__label" for="password">Password <sup>*</sup></label>
-
-              <input class="form__input <?= isset($errors['password']) ? "form__input--error" : ""; ?>" type="password" name="password" id="password" value="" placeholder="Password">
-
-              <?php if (isset($errors['password'])): ?>
-              <p class="form__message"><?= $errors['password']; ?></p>
-              <?php endif; ?>
-            </div>
-
-            <div class="form__row">
-              <label class="form__label" for="name">Name <sup>*</sup></label>
-
-              <input class="form__input <?= isset($errors['name']) ? "form__input--error" : ""; ?>" type="text" name="name" id="name" value="<?= getPOSTValue('name'); ?>" placeholder="Your name">
-
-              <?php if (isset($errors['name'])): ?>
-              <p class="form__message"><?= $errors['name']; ?></p>
-              <?php endif; ?>
-            </div>
-
-            <div class="form__row form__row--controls">
-            <p class="error-message"><?= !empty($errors) ? "Some fields do not match the requirements" : ""; ?></p>
-
-              <input class="button" type="submit" name="" value="Sign up">
-              <p>
-            </div>
-          </form>
-        </main>
       </div>
     </div>
   </div>
@@ -112,7 +75,7 @@
                   d="M13.5 8.3h2.567c.403.002.803.075 1.18.213.552.213.988.65 1.2 1.2.14.38.213.778.216 1.18v5.136c-.003.403-.076.803-.215 1.18-.213.552-.65.988-1.2 1.2-.378.14-.778.213-1.18.216h-5.135c-.403-.003-.802-.076-1.18-.215-.552-.214-.988-.65-1.2-1.2-.14-.38-.212-.78-.215-1.182V13.46v-2.566c.003-.403.076-.802.214-1.18.213-.552.65-.988 1.2-1.2.38-.14.778-.212 1.18-.215H13.5m0-1.143h-2.616c-.526.01-1.048.108-1.54.292-.853.33-1.527 1-1.856 1.854-.184.493-.283 1.014-.292 1.542v5.232c.01.526.108 1.048.292 1.54.33.853 1.003 1.527 1.855 1.856.493.184 1.015.283 1.54.293H16.117c.527-.01 1.048-.11 1.54-.293.854-.33 1.527-1.003 1.856-1.855.184-.493.283-1.015.293-1.54V13.46v-2.614c-.01-.528-.11-1.05-.293-1.542-.33-.853-1.002-1.525-1.855-1.855-.493-.185-1.014-.283-1.54-.293-.665.01-.89 0-2.617 0zm0 3.093c-2.51.007-4.07 2.73-2.808 4.898 1.26 2.17 4.398 2.16 5.645-.017.285-.495.434-1.058.433-1.63-.006-1.8-1.47-3.256-3.27-3.25zm0 5.378c-1.63-.007-2.64-1.777-1.82-3.185.823-1.41 2.86-1.4 3.67.017.18.316.276.675.278 1.04.006 1.177-.95 2.133-2.128 2.128zm4.118-5.524c0 .58-.626.94-1.127.65-.5-.29-.5-1.012 0-1.3.116-.067.245-.102.378-.102.418-.005.76.333.76.752z"/>
           </svg>
         </a>
-        <span class="visually-hidden">,</span>
+        <span class="visually-hidden"></span>
         <a class="social__link social__link--vkontakte" href="#">
           <span class="visually-hidden">vkontakte</span>
           <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">
@@ -132,5 +95,6 @@
       </div>
     </div>
   </footer>
+
 </body>
 </html>

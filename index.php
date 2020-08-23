@@ -1,17 +1,27 @@
 <?php
 
+session_start();
+
 require_once('helpers.php');
 require_once('db.php');
 
+$title = "Doings Done";
+$user_name = "";
+$userID = 0;
+
+if (!empty($_SESSION)) {
+    $userID = $_SESSION['user']['user_id'];
+    $user_name = $_SESSION['user']['name'];
+} else {
+    header("Location: guest.php");
+    exit();
+}
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
-$title = "Doings Done";
-
-$userID = 1;
-
 // getting projects for left side menu from DB
 $sql_project = "SELECT * FROM project WHERE userID = $userID";
+/** @var $con source db.php */
 $sql_result = mysqli_query($con, $sql_project);
 // moving data into a multidimensional array
 $projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
@@ -58,7 +68,6 @@ function countTasks($tasks, $project_name)
 // Чтобы получить количество дней между двумя датами, необходимо обе даты преобразовать в timestamp,
 // вычислить количество секунд между ними, затем результат преобразовать в дни,
 // разделив количество секунд на 86400 (количество секунд в одном дне, 60*60*24)
-
 // function counts days difference between today and the task's due date
 function count_time_diff($dueDate)
 {
@@ -86,7 +95,8 @@ $layout = include_template(
         'title' => $title,
         'projects' => $projects,
         'tasks' => $tasks,
-        'content' => $content
+        'content' => $content,
+        'user_name' => $user_name
     ]
 );
 

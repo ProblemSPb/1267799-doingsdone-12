@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once('helpers.php');
 require_once('db.php');
 require_once('validation.php');
@@ -8,8 +10,16 @@ require_once('validation.php');
 $show_complete_tasks = rand(0, 1);
 
 $title = "Doings Done";
+$user_name = "";
+$userID = 0;
 
-$userID = 1;
+if (!empty($_SESSION)) {
+    $userID = $_SESSION['user']['user_id'];
+    $user_name = $_SESSION['user']['name'];
+} else {
+    header("Location: guest.php");
+    exit();
+}
 
 // getting projects for left side menu from DB
 $sql_project = "SELECT * FROM project WHERE userID = $userID";
@@ -119,7 +129,8 @@ $layout = include_template(
         'title' => $title,
         'projects' => $projects,
         'tasks' => $tasks,
-        'content' => $content
+        'content' => $content,
+        'user_name' => $user_name
     ]
 );
 
