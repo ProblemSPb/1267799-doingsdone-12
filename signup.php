@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // if user with this email alredy exists in DB
+    // if user with this email already exists in DB
     $stmt = $con->prepare("SELECT id FROM user WHERE email = ?");
     $stmt->bind_param("s", $_POST['email']);
     $stmt->execute();

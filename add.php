@@ -41,19 +41,6 @@ $sql_task = "SELECT task.*, project.name as project_name
 $sql_task_result = mysqli_query($con, $sql_task);
 $tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
-// function counts tasks in the project
-function countTasks($tasks, $project_name)
-{
-    $counter = 0;
-
-    foreach ($tasks as $key => $value) {
-        if ($value['project_name'] === $project_name) {
-            $counter++;
-        }
-    }
-
-    return $counter;
-}
 
 // link to a file is empty unless an actual file is added to a new task
 $link_file = NULL;

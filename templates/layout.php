@@ -47,7 +47,7 @@
                     </nav>
                     <?php endforeach; ?>
 
-                    <a class="button button--transparent button--plus content__side-button" href="add.php" target="project_add">Add a new project</a>
+                    <a class="button button--transparent button--plus content__side-button" href="add_project.php" target="project_add">Add a new project</a>
                 </section>
 
                 <main class="content__main">
