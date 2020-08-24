@@ -8,6 +8,12 @@ function getPOSTValue($value)
     return $_POST[$value] ?? '';
 }
 
+// get field's value if GET sent
+function getGETValue($value)
+{
+    return $_GET[$value] ?? '';
+}
+
 // validates if text field not empty and is within the chars limits
 function validateSize($field, $max)
 {

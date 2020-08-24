@@ -24,8 +24,7 @@
 
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
-                            <p><?= /** @var $user_name source index.php */
-                                $user_name; ?></p>
+                            <p><?= $user_name; ?></p>
 
                             <a href="logout.php">Leave</a>
                         </div>
@@ -37,8 +36,7 @@
                 <section class="content__side">
                     <h2 class="content__side-heading">Projects</h2>
 
-                    <?php /** @var $projects source index.php */
-                    foreach($projects as $key => $value): ?>
+                    <?php foreach($projects as $key => $value): ?>
                     <nav class="main-navigation">
                         <ul class="main-navigation__list">
                             <li class="main-navigation__list-item">

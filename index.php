@@ -4,6 +4,7 @@ session_start();
 
 require_once('helpers.php');
 require_once('db.php');
+require_once('validation.php');
 
 $title = "Doings Done";
 $user_name = "";
@@ -21,12 +22,11 @@ $show_complete_tasks = rand(0, 1);
 
 // getting projects for left side menu from DB
 $sql_project = "SELECT * FROM project WHERE userID = $userID";
-/** @var $con source db.php */
 $sql_result = mysqli_query($con, $sql_project);
 // moving data into a multidimensional array
 $projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 
-// getting tasks from DB
+// getting all tasks from DB
 $sql_task = "SELECT task.*, project.name as project_name
             FROM task as task
             JOIN project as project ON task.projectID = project.id
@@ -48,34 +48,24 @@ if (!mysqli_num_rows($sql_task_result)) {
     // exit();
     $no_tasks = 'No tasks found';
 }
-$tasks_by_project = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
+$tasks_filtered = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
+// searching tasks by key words
+$search = '';
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
 
-// function counts tasks in the project
-function countTasks($tasks, $project_name)
-{
-    $counter = 0;
+    $stmt = $con->prepare("SELECT * FROM task WHERE MATCH(name) AGAINST (?)");
+    $stmt->bind_param("s", $search);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $all_rows = $result->fetch_all(MYSQLI_ASSOC);
+    $tasks_filtered = $all_rows;
+    $stmt->close();
 
-    foreach ($tasks as $key => $value) {
-        if ($value['project_name'] === $project_name) {
-            $counter++;
-        }
+    if (empty($tasks_filtered)) {
+        $no_tasks = 'No tasks found';
     }
-
-    return $counter;
-}
-
-// Чтобы получить количество дней между двумя датами, необходимо обе даты преобразовать в timestamp,
-// вычислить количество секунд между ними, затем результат преобразовать в дни,
-// разделив количество секунд на 86400 (количество секунд в одном дне, 60*60*24)
-// function counts days difference between today and the task's due date
-function count_time_diff($dueDate)
-{
-    $diff = 100;
-    if ($dueDate !== null) {
-        $diff = floor((strtotime($dueDate) - strtotime(today)) / 86400);
-    }
-    return $diff;
 }
 
 $content = include_template(
@@ -84,8 +74,9 @@ $content = include_template(
         'tasks' => $tasks,
         'projects' => $projects,
         'show_complete_tasks' => $show_complete_tasks,
-        'tasks_by_project' => $tasks_by_project,
-        'no_tasks' => $no_tasks
+        'tasks_filtered' => $tasks_filtered,
+        'no_tasks' => $no_tasks,
+        'search' => $search
     ]
 );
 

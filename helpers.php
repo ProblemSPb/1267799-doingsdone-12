@@ -142,3 +142,39 @@ function include_template($name, array $data = []) {
 
     return $result;
 }
+
+
+/** function counts tasks in the project
+ * @param $tasks
+ * @param $project_name project we are searching for
+ * @return int number of tasks
+ */
+function countTasks($tasks, $project_name)
+{
+    $counter = 0;
+
+    foreach ($tasks as $key => $value) {
+        if ($value['project_name'] === $project_name) {
+            $counter++;
+        }
+    }
+
+    return $counter;
+}
+
+// Чтобы получить количество дней между двумя датами, необходимо обе даты преобразовать в timestamp,
+// вычислить количество секунд между ними, затем результат преобразовать в дни,
+// разделив количество секунд на 86400 (количество секунд в одном дне, 60*60*24)
+// function counts days difference between today and the task's due date
+/** Counts the difference in days between Today and Task Due Date
+ * @param $dueDate
+ * @return int Number of days till the due date
+ */
+function count_time_diff($dueDate)
+{
+    $diff = 100;
+    if ($dueDate !== null) {
+        $diff = floor((strtotime($dueDate) - strtotime(today)) / 86400);
+    }
+    return $diff;
+}
