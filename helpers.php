@@ -178,3 +178,23 @@ function count_time_diff($dueDate)
     }
     return $diff;
 }
+
+/** Updates the status of a task when checkbox is clicked
+ * @param $con
+ * @param $task_id
+ * @param $status
+ * @param $userID
+ * @return bool|mysqli_result
+ */
+function set_task_status($con, $task_id, $status, $userID)
+{
+    if ($status === '0') {
+        $status = '1';
+    } else {
+        $status = '0';
+    }
+
+    $sql = "UPDATE task SET status = {$status} WHERE id = {$task_id} AND userID = {$userID}";
+
+    return mysqli_query($con, $sql);
+}

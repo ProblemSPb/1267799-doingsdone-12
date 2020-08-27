@@ -37,6 +37,16 @@ $sql_task = "SELECT task.*, project.name as project_name
 $sql_task_result = mysqli_query($con, $sql_task);
 $all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
+// checking if checkbox is clicked => task status changed
+if (isset($_GET['set_task_status']) && isset($_GET['status'])) {
+    $task_id = $_GET['set_task_status'];
+    $status = $_GET['status'];
+    if (set_task_status($con, $task_id, $status, $userID)) {
+        header("Location: /");
+        exit;
+    }
+}
+
 function get_task_rows($con, $userID, $projectID = 0, $filter = '', $query = '')
 {
     $rows = [];

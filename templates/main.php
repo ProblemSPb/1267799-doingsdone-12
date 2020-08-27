@@ -38,7 +38,7 @@
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input id="<?= $value['id']; ?>" class="checkbox__input visually-hidden task__checkbox task_checker" type="checkbox"
-                           value="<?= $value['id']; ?>" <?= ($value['status']) ? 'checked' : ''; ?>>
+                           value="<?= $value['id']; ?>" onclick="window.location = '/?set_task_status=<?=$value['id']?>&status=<?=$value['status']?>'" <?= ($value['status']) ? 'checked' : ''; ?>>
                     <span class="checkbox__text"> <?= $value['name']; ?> </span>
                 </label>
             </td>
