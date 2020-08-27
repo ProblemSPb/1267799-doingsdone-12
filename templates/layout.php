@@ -40,8 +40,8 @@
                     <nav class="main-navigation">
                         <ul class="main-navigation__list">
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link <?= ($_GET['id'] === $value['id']) ? 'main-navigation__list-item--active' : ''; ?>" href="index.php?id=<?= $value['id']; ?>"><?= $value['name']; ?></a>
-                                <span class="main-navigation__list-item-count"><?= countTasks($tasks, $value['name']);?></span>
+                                <a class="main-navigation__list-item-link <?= ($_GET['id'] === $value['id']) ? 'main-navigation__list-item--active' : ''; ?>" href="index.php?id=<?= $value['id']; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>"><?= $value['name']; ?></a>
+                                <span class="main-navigation__list-item-count"><?= countTasks($all_tasks, $value['name']);?></span>
                             </li>
                         </ul>
                     </nav>
@@ -115,6 +115,7 @@
 
     <script src="flatpickr.js"></script>
     <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </body>
 
 </html>

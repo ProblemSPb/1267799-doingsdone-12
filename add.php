@@ -33,17 +33,17 @@ $sql_result = mysqli_query($con, $sql_project_id);
 // moving data into a multidimensional array
 $projects_id = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 
-// getting tasks from DB
+// getting all tasks from DB
 $sql_task = "SELECT task.*, project.name as project_name
             FROM task as task
             JOIN project as project ON task.projectID = project.id
             WHERE task.userID = $userID";
 $sql_task_result = mysqli_query($con, $sql_task);
-$tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
+$all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
 
 // link to a file is empty unless an actual file is added to a new task
-$link_file = NULL;
+$file = NULL;
 // due date empty if not assigned
 $due_date = NULL;
 
@@ -79,7 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $file_url = '/uploads/' . $file_name;
             $link_file = $file_url;
 
-            move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
+            $result = move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
+
+            if ($result) {
+                $file = $file_url;
+            }
 
         }
     }
@@ -93,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $sql = "INSERT INTO task (name, file, due_date, userID, projectID)
         VALUES  (?, ?, ?, ?, ?)";
-        $stmt = db_get_prepare_stmt($con, $sql, [$name, $link_file, $due_date, $userID, $project_id]);
+        $stmt = db_get_prepare_stmt($con, $sql, [$name, $file, $due_date, $userID, $project_id]);
         $result = mysqli_stmt_execute($stmt);
 
         if($result) {
@@ -115,7 +119,7 @@ $layout = include_template(
     [
         'title' => $title,
         'projects' => $projects,
-        'tasks' => $tasks,
+        'all_tasks' => $all_tasks,
         'content' => $content,
         'user_name' => $user_name
     ]

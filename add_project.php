@@ -32,7 +32,7 @@ $sql_task = "SELECT task.*, project.name as project_name
             JOIN project as project ON task.projectID = project.id
             WHERE task.userID = $userID";
 $sql_task_result = mysqli_query($con, $sql_task);
-$tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
+$all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
 //////////////////////
 /// Layout data end
@@ -42,7 +42,7 @@ $errors = [];
 
 if (isset($_POST['name'])) {
     $validate_empty = validateSize($_POST['name'], 30);
-    
+
     if (empty($validate_empty)) {
         // if project with this name already exists
         $search = ($_POST['name']);
@@ -82,7 +82,7 @@ $layout = include_template('layout.php',
     [
         'title' => $title,
         'projects' => $projects,
-        'tasks' => $tasks,
+        'all_tasks' => $all_tasks,
         'content' => $content,
         'user_name' => $user_name
     ]

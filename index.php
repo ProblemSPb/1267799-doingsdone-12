@@ -17,8 +17,11 @@ if (!empty($_SESSION)) {
     header("Location: guest.php");
     exit();
 }
-// показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
+// show or hide completed tasks
+$show_complete_tasks = 0;
+if (isset($_GET['show_completed'])) {
+    $show_complete_tasks = intval($_GET['show_completed']);
+}
 
 // getting projects for left side menu from DB
 $sql_project = "SELECT * FROM project WHERE userID = $userID";
@@ -32,40 +35,56 @@ $sql_task = "SELECT task.*, project.name as project_name
             JOIN project as project ON task.projectID = project.id
             WHERE task.userID = $userID";
 $sql_task_result = mysqli_query($con, $sql_task);
-$tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
+$all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
-// if a project is selected, respective tasks are shown
-if (isset($_GET['id']) && $_GET['id']) {
-    $projectID = mysqli_real_escape_string($con, intval($_GET['id']));
-    $sql_task .= " AND projectID = $projectID ";
+function get_task_rows($con, $userID, $projectID = 0, $filter = '', $query = '')
+{
+    $rows = [];
+
+    // search tasks by key words
+    $query_text = "";
+    if ($query) {
+        $query_text = " AND MATCH(task.name) AGAINST('{$query}')";
+    }
+
+    // show tasks by categories "today"/"tomorrow"/"stale"
+    $filter_text = "";
+    if ($filter === '2') {
+        $filter_text = " AND due_date = CURDATE()";
+    } else if ($filter === '3') {
+        $filter_text = " AND due_date IN (CURDATE(), CURDATE() + INTERVAL 1 DAY)";
+    } else if ($filter === '4') {
+        $filter_text = " AND due_date < CURDATE()";
+    }
+
+    // show tasks by project
+    if ($projectID === '0') {
+        $sql = "SELECT task.*, project.name as project_name FROM task as task
+                JOIN project as project ON task.projectID = project.id
+                WHERE task.userID = $userID" . $filter_text .$query_text;
+    } elseif ($projectID !== 0) {
+        $sql = "SELECT task.*, project.name as project_name FROM task as task
+                JOIN project as project ON task.projectID = project.id
+                WHERE task.userID = $userID AND task.projectID = " . $projectID . $filter_text .$query_text;
+    } else {
+        $sql = "SELECT task.*, project.name as project_name FROM task as task JOIN project as project ON task.projectID = project.id WHERE task.userID = $userID" . $filter_text .$query_text;
+    }
+
+    $sql_result = mysqli_query($con, $sql);
+    $rows = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
+
+    return $rows;
 }
-$sql_task_result = mysqli_query($con, $sql_task);
+
+$projectID = $_GET['id'] ?? 0;
+$filter = $_GET['filter'] ?? 0;
+$search = $_GET['search'] ?? "";
+$tasks = get_task_rows($con, $userID, $projectID, $filter, $search);
 
 // if no tasks in the project
 $no_tasks = '';
-if (!mysqli_num_rows($sql_task_result)) {
-    // http_response_code(404);
-    // exit();
+if (empty($tasks)) {
     $no_tasks = 'No tasks found';
-}
-$tasks_filtered = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
-
-// searching tasks by key words
-$search = '';
-if (isset($_GET['search'])) {
-    $search = $_GET['search'];
-
-    $stmt = $con->prepare("SELECT * FROM task WHERE MATCH(name) AGAINST (?)");
-    $stmt->bind_param("s", $search);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $all_rows = $result->fetch_all(MYSQLI_ASSOC);
-    $tasks_filtered = $all_rows;
-    $stmt->close();
-
-    if (empty($tasks_filtered)) {
-        $no_tasks = 'No tasks found';
-    }
 }
 
 $content = include_template(
@@ -74,7 +93,6 @@ $content = include_template(
         'tasks' => $tasks,
         'projects' => $projects,
         'show_complete_tasks' => $show_complete_tasks,
-        'tasks_filtered' => $tasks_filtered,
         'no_tasks' => $no_tasks,
         'search' => $search
     ]
@@ -85,7 +103,7 @@ $layout = include_template(
     [
         'title' => $title,
         'projects' => $projects,
-        'tasks' => $tasks,
+        'all_tasks' => $all_tasks,
         'content' => $content,
         'user_name' => $user_name
     ]

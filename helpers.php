@@ -145,15 +145,15 @@ function include_template($name, array $data = []) {
 
 
 /** function counts tasks in the project
- * @param $tasks
+ * @param $all_tasks
  * @param $project_name project we are searching for
  * @return int number of tasks
  */
-function countTasks($tasks, $project_name)
+function countTasks($all_tasks, $project_name)
 {
     $counter = 0;
 
-    foreach ($tasks as $key => $value) {
+    foreach ($all_tasks as $key => $value) {
         if ($value['project_name'] === $project_name) {
             $counter++;
         }
