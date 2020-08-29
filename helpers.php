@@ -146,7 +146,7 @@ function include_template($name, array $data = []) {
 
 /** function counts tasks in the project
  * @param $all_tasks
- * @param $project_name project we are searching for
+ * @param $project_name - project we are searching for
  * @return int number of tasks
  */
 function countTasks($all_tasks, $project_name)
@@ -197,4 +197,16 @@ function set_task_status($con, $task_id, $status, $userID)
     $sql = "UPDATE task SET status = {$status} WHERE id = {$task_id} AND userID = {$userID}";
 
     return mysqli_query($con, $sql);
+}
+
+
+/**
+ * Class UserHelper
+ * checks if user is logged in
+ */
+class UserHelper {
+
+    public static function isLoggedIn() {
+        return isset($_SESSION['user']);
+    }
 }

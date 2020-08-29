@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title><?= $title; ?></title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/flatpickr.min.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/flatpickr.min.css">
 </head>
 
 <body>
@@ -16,17 +16,17 @@
         <div class="container container--with-sidebar">
             <header class="main-header">
                 <a href="/">
-                    <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+                    <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
                 </a>
 
                 <div class="main-header__side">
-                    <a class="main-header__side-item button button--plus open-modal" href="add.php">Add a new task</a>
+                    <a class="main-header__side-item button button--plus open-modal" href="/add.php">Add a new task</a>
 
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
                             <p><?= $user_name; ?></p>
 
-                            <a href="logout.php">Leave</a>
+                            <a href="/logout.php">Leave</a>
                         </div>
                     </div>
                 </div>
@@ -40,14 +40,14 @@
                     <nav class="main-navigation">
                         <ul class="main-navigation__list">
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link <?= ($_GET['id'] === $value['id']) ? 'main-navigation__list-item--active' : ''; ?>" href="index.php?id=<?= $value['id']; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>"><?= $value['name']; ?></a>
+                                <a class="main-navigation__list-item-link <?= ($_GET['id'] === $value['id']) ? 'main-navigation__list-item--active' : ''; ?>" href="/index.php?id=<?= $value['id']; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>"><?= $value['name']; ?></a>
                                 <span class="main-navigation__list-item-count"><?= countTasks($all_tasks, $value['name']);?></span>
                             </li>
                         </ul>
                     </nav>
                     <?php endforeach; ?>
 
-                    <a class="button button--transparent button--plus content__side-button" href="add_project.php" target="project_add">Add a new project</a>
+                    <a class="button button--transparent button--plus content__side-button" href="/add_project.php" target="project_add">Add a new project</a>
                 </section>
 
                 <main class="content__main">
@@ -61,12 +61,12 @@
     <footer class="main-footer">
         <div class="container">
             <div class="main-footer__copyright">
-                <p>© 2020, «Doins Done»</p>
+                <p>© 2020, «Doings Done»</p>
 
                 <p>Web Task Manager</p>
             </div>
 
-            <a class="main-footer__button button button--plus" href="add.php">Add a new task</a>
+            <a class="main-footer__button button button--plus" href="/add.php">Add a new task</a>
 
             <div class="main-footer__social social">
                 <span class="visually-hidden">Contacts:</span>
@@ -107,15 +107,15 @@
                 <span class="visually-hidden"></span>
 
                 <a href="https://htmlacademy.ru/intensive/php">
-                    <img src="img/htmlacademy.svg" alt="HTML Academy" width="118" height="40">
+                    <img src="/img/htmlacademy.svg" alt="HTML Academy" width="118" height="40">
                 </a>
             </div>
         </div>
     </footer>
 
-    <script src="flatpickr.js"></script>
-    <script src="script.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="/flatpickr.js"></script>
+    <script src="/script.js"></script>
+    <script src="/https://code.jquery.com/jquery-3.5.0.js"></script>
 </body>
 
 </html>

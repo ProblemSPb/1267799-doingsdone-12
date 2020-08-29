@@ -1,6 +1,11 @@
 <?php
 
 require_once('helpers.php');
+require_once('vendor/autoload.php');
+
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationExceptionInterface;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 // get field's value if POST sent
 function getPOSTValue($value)
@@ -15,16 +20,12 @@ function getGETValue($value)
 }
 
 // validates if text field not empty and is within the chars limits
-function validateSize($field, $max)
+function validateSize($field)
 {
-    $validation = "";
-
-    if (empty($field)) {
-        $validation = 'Field cannot be empty';
-    }
-
-    if (strlen($field) > $max) {
-        $validation = "It should not be more than " . $max . " characters.";
+    $validation = '';
+    $validator = v::stringType()->length(1, 40);
+    if (!$validator->validate($field)) {
+        $validation = "The field cannot be empty and have more than 40 chars.";
     }
 
     return $validation;
@@ -36,7 +37,8 @@ function validateDueDate($date)
     $validation = "";
 
     if (!(empty($date))) {
-        if (!is_date_valid($date)) {
+//        if (!is_date_valid($date)) {
+        if (!v::date('Y-m-d')) {
             $validation = "Date format should be YYYY-MM-DD";
         }
     }
@@ -60,7 +62,7 @@ function validateProject($value, $array)
     $validation = "";
 
     if (!(in_array($value, $array))) {
-        $validation = "Select an existing project";
+        $validation = "Select one of the existing projects";
     }
 
     return $validation;
@@ -70,37 +72,35 @@ function validateProject($value, $array)
 function validateEmail($email)
 {
     $validation = "";
-
-    if (empty($email)) {
-        $validation = "Email field cannot be empty";
-    }
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!v::email()->validate($email)) {
         $validation = "It's not a valid email";
     }
 
     return $validation;
 }
 
-// validate pass
-function validatePassword ($pass)
+// validate password
+function validatePassword($pass)
 {
     $validation = "";
+    $validation_array = [];
 
-    if (empty($pass)) {
-        $validation = "Password field cannot be empty";
+    $validator = v::length(6, 30)->noWhitespace()->regex('/[A-Z]/')->regex( '/[a-z]/')->regex('/[0-9]/');
+
+    try {
+        $validator->assert($pass);
+    } catch (NestedValidationException $exception) {
+        $validation_array =
+            $exception->getMessages([
+                'length' => 'Password must not have less than 6 and more than 30 chars.',
+                'noWhitespace' => 'Password should not contain spaces.',
+                'regex' => 'Password should have numbers, upper- and lowercase letters.'
+            ]);
     }
 
-    if (strlen($pass) < 6) {
-        $validation = "Password should have at least 6 characters including numbers, upper- and lowercase letters";
-    }
-
-    if (strlen($pass) > 30) {
-        $validation = "Password should not be longer than 30 characters and have numbers, upper- and lowercase letters";
-    }
-
-    if (!((preg_match('/[A-Z]/', $pass)) && (preg_match('/[a-z]/', $pass)) && preg_match('/[0-9]/', $pass))) {
-        $validation = "Password should have numbers, upper- and lowercase letters";
+    // in case we want more than 1 rule of validation
+    foreach ($validation_array as $key => $value) {
+        $validation = $validation . " " . $value;
     }
 
     return $validation;

@@ -1,6 +1,6 @@
 <h2 class="content__main-heading">Adding new task</h2>
 
-<form class="form"  action="add.php" method="post" autocomplete="off" enctype="multipart/form-data">
+<form class="form"  action="/add.php" method="post" autocomplete="off" enctype="multipart/form-data">
   <div class="form__row">
     <label class="form__label" for="name">Title <sup>*</sup></label>
 

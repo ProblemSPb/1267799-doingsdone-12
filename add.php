@@ -13,9 +13,10 @@ $title = "Doings Done";
 $user_name = "";
 $userID = 0;
 
-if (!empty($_SESSION)) {
+if (UserHelper::isLoggedIn()) {
     $userID = $_SESSION['user']['user_id'];
     $user_name = $_SESSION['user']['name'];
+
 } else {
     header("Location: guest.php");
     exit();
@@ -53,7 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // validation rules
     $rules = [
-        'name' => validateSize($_POST['name'], 50),
+//        'name' => validateSize($_POST['name'], 50),
+        'name' => validateSize($_POST['name']),
         'date' => validateDueDate($_POST['date']),
         'projects' => validateProject($_POST['project'], $projects_id)
     ];
@@ -72,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // validating and adding file if uploaded
     if (isset($_FILES['file'])) {
         if ($_FILES['file']['size'] > 200000) {
-            $errors['file'] = "File zise should not exceed 200KB";
+            $errors['file'] = "File size should not exceed 200KB";
         } else {
             $file_name = $_FILES['file']['name'];
             $file_path = __DIR__ . '/uploads/';

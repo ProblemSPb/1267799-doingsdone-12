@@ -13,13 +13,15 @@ $title = "Doings Done";
 $user_name = "";
 $userID = 0;
 
-if (!empty($_SESSION)) {
+if (UserHelper::isLoggedIn()) {
     $userID = $_SESSION['user']['user_id'];
     $user_name = $_SESSION['user']['name'];
+
 } else {
     header("Location: guest.php");
     exit();
 }
+
 // getting projects for left side menu from DB
 $sql_project = "SELECT * FROM project WHERE userID = $userID";
 $sql_result = mysqli_query($con, $sql_project);
@@ -41,7 +43,7 @@ $all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 $errors = [];
 
 if (isset($_POST['name'])) {
-    $validate_empty = validateSize($_POST['name'], 30);
+    $validate_empty = validateSize($_POST['name']);
 
     if (empty($validate_empty)) {
         // if project with this name already exists

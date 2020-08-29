@@ -5,18 +5,21 @@ session_start();
 require_once('helpers.php');
 require_once('db.php');
 require_once('validation.php');
+require_once ('vendor/autoload.php');
 
 $title = "Doings Done";
 $user_name = "";
 $userID = 0;
 
-if (!empty($_SESSION)) {
+if (UserHelper::isLoggedIn()) {
     $userID = $_SESSION['user']['user_id'];
     $user_name = $_SESSION['user']['name'];
+
 } else {
     header("Location: guest.php");
     exit();
 }
+
 // show or hide completed tasks
 $show_complete_tasks = 0;
 if (isset($_GET['show_completed'])) {
@@ -49,7 +52,7 @@ if (isset($_GET['set_task_status']) && isset($_GET['status'])) {
 
 function get_task_rows($con, $userID, $projectID = 0, $filter = '', $query = '')
 {
-    $rows = [];
+//    $rows = [];
 
     // search tasks by key words
     $query_text = "";
@@ -81,9 +84,9 @@ function get_task_rows($con, $userID, $projectID = 0, $filter = '', $query = '')
     }
 
     $sql_result = mysqli_query($con, $sql);
-    $rows = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
+//    $rows = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 
-    return $rows;
+    return mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 }
 
 $projectID = $_GET['id'] ?? 0;
@@ -120,3 +123,7 @@ $layout = include_template(
 );
 
 print($layout);
+
+
+// TODO: сделать подсветку табов при выборе фильтров
+

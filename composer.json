@@ -1,0 +1,15 @@
+{
+    "name": "admin/doingsdone",
+    "description": "Web task manager",
+    "authors": [
+        {
+            "name": "ProblemSPb",
+            "email": "ussr83@mail.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2",
+        "true/punycode": "^2.1",
+        "respect/validation": "^2.0"
+    }
+}

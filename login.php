@@ -7,7 +7,7 @@ require_once ('validation.php');
 require_once('db.php');
 
 // if user is already logged in
-if (!empty($_SESSION)) {
+if (UserHelper::isLoggedIn()) {
     header("Location: index.php");
     exit();
 }
@@ -17,7 +17,7 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rules = [
         'email' => validateEmail($_POST['email']),
-        'password' => validateSize($_POST['password'], 30)
+        'password' => validateSize($_POST['password'])
     ];
 
     foreach ($_POST as $key => $value) {
