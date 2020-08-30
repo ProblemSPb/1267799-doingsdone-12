@@ -28,7 +28,7 @@ if (isset($_GET['show_completed'])) {
 }
 
 // getting projects for left side menu from DB
-$sql_project = "SELECT * FROM project WHERE userID = $userID";
+$sql_project = "SELECT * FROM project WHERE userID = $userID ORDER BY name ASC";
 $sql_result = mysqli_query($con, $sql_project);
 // moving data into a multidimensional array
 $projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
@@ -65,16 +65,16 @@ function get_task_rows($con, $userID, $projectID = 0, $filter = '', $query = '')
 
     // show tasks by categories "today"/"tomorrow"/"stale"
     $filter_text = "";
-    if ($filter === '2') {
+    if ($filter === 2) {
         $filter_text = " AND due_date = CURDATE()";
-    } else if ($filter === '3') {
+    } else if ($filter === 3) {
         $filter_text = " AND due_date IN (CURDATE(), CURDATE() + INTERVAL 1 DAY)";
-    } else if ($filter === '4') {
+    } else if ($filter === 4) {
         $filter_text = " AND due_date < CURDATE()";
     }
 
     // show tasks by project
-    if ($projectID === '0') {
+    if ($projectID === 0) {
         $sql = "SELECT task.*, project.name as project_name FROM task as task
                 JOIN project as project ON task.projectID = project.id
                 WHERE task.userID = $userID" . $filter_text .$query_text;
@@ -138,7 +138,7 @@ $layout = include_template(
 print($layout);
 
 
-// TODO: сделать подсветку табов при выборе фильтров
 // TODO: POD prep stmnt - не везде сейчас
-// TODO: выводить проекты в меню слева в алфавитном порядке
+// TODO: сделать функционал удаления и редактирования проектов
+// TODO: сделать функционал удаления задач
 

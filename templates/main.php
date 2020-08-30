@@ -13,10 +13,14 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/<?= isset($_GET['id'])? "?id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>" class="tasks-switch__item tasks-switch__item--active">All Tasks</a>
-        <a href="/?filter=2<?= isset($_GET['id'])? "&id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>" class="tasks-switch__item">Today</a>
-        <a href="/?filter=3<?= isset($_GET['id'])? "&id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>" class="tasks-switch__item">Tomorrow</a>
-        <a href="/?filter=4<?= isset($_GET['id'])? "&id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>" class="tasks-switch__item">Stale</a>
+        <a href="/<?= isset($_GET['id'])? "?id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>"
+           class="tasks-switch__item <?= (empty($_GET['filter'])) ? "tasks-switch__item--active" : "" ; ?>">All Tasks</a>
+        <a href="/?filter=2<?= isset($_GET['id'])? "&id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>"
+           class="tasks-switch__item <?= (intval($_GET['filter']) === 2) ? "tasks-switch__item--active" : "" ; ?>">Today</a>
+        <a href="/?filter=3<?= isset($_GET['id'])? "&id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>"
+           class="tasks-switch__item <?= (intval($_GET['filter']) === 3) ? "tasks-switch__item--active" : "" ; ?>">Tomorrow</a>
+        <a href="/?filter=4<?= isset($_GET['id'])? "&id=".$_GET['id'] : "&id=0"; ?><?= isset($_GET['show_completed'])? "&show_completed=1" : ""; ?>"
+           class="tasks-switch__item <?= (intval($_GET['filter']) === 4) ? "tasks-switch__item--active" : "" ; ?>">Stale</a>
         <a href="/" class="tasks-switch__item">Clear Filters</a>
     </nav>
 

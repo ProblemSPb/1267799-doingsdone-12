@@ -256,6 +256,7 @@ a:focus {
 
 .content__side-button {
   width: 225px;
+  margin-bottom: 15px;
 }
 
 .content__side-info {
