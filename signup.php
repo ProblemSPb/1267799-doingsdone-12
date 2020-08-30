@@ -15,10 +15,16 @@ if (UserHelper::isLoggedIn()) {
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $name = trim($_POST['name']);
+    $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+    $email = trim($_POST['email']);
+    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
     $rules = [
-        'email' => validateEmail($_POST['email']),
+        'email' => validateEmail($email),
         'password' => validatePassword($_POST['password']),
-        'name' => validateSize($_POST['name'])
+        'name' => validateSize($name)
     ];
 
     foreach ($_POST as $key => $value) {
@@ -29,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // if user with this email already exists in DB
     $stmt = $con->prepare("SELECT id FROM user WHERE email = ?");
-    $stmt->bind_param("s", $_POST['email']);
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt_result = mysqli_stmt_get_result($stmt);
     $stmt->close();
@@ -41,9 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
 
     if (empty($errors)) {
-        $email = $_POST['email'];
         $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $name = $_POST['name'];
 
         $sql = "INSERT INTO user (username, email, password) VALUES (?, ?, ?)";
         $stmt = mysqli_prepare($con, $sql);

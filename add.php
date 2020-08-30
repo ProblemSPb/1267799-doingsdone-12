@@ -14,8 +14,8 @@ $user_name = "";
 $userID = 0;
 
 if (UserHelper::isLoggedIn()) {
-    $userID = $_SESSION['user']['user_id'];
-    $user_name = $_SESSION['user']['name'];
+    $userID = intval($_SESSION['user']['user_id']);
+    $user_name = htmlspecialchars($_SESSION['user']['name'], ENT_QUOTES, 'UTF-8');
 
 } else {
     header("Location: guest.php");
@@ -52,12 +52,23 @@ $errors = [];
 // checking if form is sent
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    // sanitizing user's inputs
+    $name = trim($_POST['name']);
+    $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+    $project_id = trim($_POST['project']);
+    $project_id = intval($project_id);
+
+    if (isset($_POST['date'])) {
+        $due_date = trim($_POST['date']);
+        $due_date = htmlspecialchars($due_date, ENT_QUOTES, 'UTF-8');
+    }
+
     // validation rules
     $rules = [
 //        'name' => validateSize($_POST['name'], 50),
-        'name' => validateSize($_POST['name']),
-        'date' => validateDueDate($_POST['date']),
-        'projects' => validateProject($_POST['project'], $projects_id)
+        'name' => validateSize($name),
+        'date' => validateDueDate($due_date),
+        'projects' => validateProject($project_id, $projects_id)
     ];
 
     // filling in array with error if any
@@ -67,16 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (isset($_POST['date'])) {
-        $due_date = $_POST['date'];
-    }
-
     // validating and adding file if uploaded
     if (isset($_FILES['file'])) {
         if ($_FILES['file']['size'] > 200000) {
             $errors['file'] = "File size should not exceed 200KB";
         } else {
-            $file_name = $_FILES['file']['name'];
+            $file_name = htmlspecialchars($_FILES['file']['name'], ENT_QUOTES, 'UTF-8');
             $file_path = __DIR__ . '/uploads/';
             $file_url = '/uploads/' . $file_name;
             $link_file = $file_url;
@@ -93,9 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
 
     if (empty($errors)) {
-
-        $name = $_POST['name'];
-        $project_id = $_POST['project'];
 
         $sql = "INSERT INTO task (name, file, due_date, userID, projectID)
         VALUES  (?, ?, ?, ?, ?)";

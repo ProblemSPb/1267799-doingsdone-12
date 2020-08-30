@@ -12,8 +12,8 @@ $user_name = "";
 $userID = 0;
 
 if (UserHelper::isLoggedIn()) {
-    $userID = $_SESSION['user']['user_id'];
-    $user_name = $_SESSION['user']['name'];
+    $userID = intval($_SESSION['user']['user_id']);
+    $user_name = htmlspecialchars($_SESSION['user']['name'], ENT_QUOTES, 'UTF-8');
 
 } else {
     header("Location: guest.php");
@@ -23,7 +23,8 @@ if (UserHelper::isLoggedIn()) {
 // show or hide completed tasks
 $show_complete_tasks = 0;
 if (isset($_GET['show_completed'])) {
-    $show_complete_tasks = intval($_GET['show_completed']);
+    $show_complete_tasks = trim($_GET['show_completed']);
+    $show_complete_tasks = intval($show_complete_tasks);
 }
 
 // getting projects for left side menu from DB
@@ -42,8 +43,10 @@ $all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
 // checking if checkbox is clicked => task status changed
 if (isset($_GET['set_task_status']) && isset($_GET['status'])) {
-    $task_id = $_GET['set_task_status'];
-    $status = $_GET['status'];
+    $task_id = trim($_GET['set_task_status']);
+    $task_id = intval($task_id);
+    $status = trim($_GET['status']);
+    $status = intval($status);
     if (set_task_status($con, $task_id, $status, $userID)) {
         header("Location: /");
         exit;
@@ -89,9 +92,19 @@ function get_task_rows($con, $userID, $projectID = 0, $filter = '', $query = '')
     return mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 }
 
+// sanitizing user's input
 $projectID = $_GET['id'] ?? 0;
+$projectID = trim($projectID);
+$projectID = intval($projectID);
+
 $filter = $_GET['filter'] ?? 0;
+$filter = trim($filter);
+$filter = intval($filter);
+
 $search = $_GET['search'] ?? "";
+$search = trim($search);
+$search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?? "";
+
 $tasks = get_task_rows($con, $userID, $projectID, $filter, $search);
 
 // if no tasks in the project
@@ -126,4 +139,6 @@ print($layout);
 
 
 // TODO: сделать подсветку табов при выборе фильтров
+// TODO: POD prep stmnt - не везде сейчас
+// TODO: выводить проекты в меню слева в алфавитном порядке
 

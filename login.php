@@ -15,8 +15,12 @@ if (UserHelper::isLoggedIn()) {
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $email = trim($_POST['email']);
+    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
     $rules = [
-        'email' => validateEmail($_POST['email']),
+        'email' => validateEmail($email),
         'password' => validateSize($_POST['password'])
     ];
 
@@ -30,14 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // compare email with DB values, if exists compare password hash
     if (empty($errors)) {
         $stmt = $con->prepare("SELECT id, username, password FROM user WHERE email = ?");
-        $stmt->bind_param("s", $_POST['email']);
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt_result = mysqli_stmt_get_result($stmt);
         $record = mysqli_fetch_all($stmt_result, MYSQLI_ASSOC);
 
         if (mysqli_num_rows($stmt_result)) {
             if (password_verify($_POST['password'], $record[0]['password'])) {
-                $user = array('email' => $_POST['email'], 'name' => $record[0]['username'], 'user_id' => $record[0]['id']);
+                $user = array('email' => $email, 'name' => $record[0]['username'], 'user_id' => $record[0]['id']);
                 session_start();
                 $_SESSION['user'] = $user;
 //                var_dump($_SESSION['user']);

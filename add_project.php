@@ -14,8 +14,8 @@ $user_name = "";
 $userID = 0;
 
 if (UserHelper::isLoggedIn()) {
-    $userID = $_SESSION['user']['user_id'];
-    $user_name = $_SESSION['user']['name'];
+    $userID = intval($_SESSION['user']['user_id']);
+    $user_name = htmlspecialchars($_SESSION['user']['name'], ENT_QUOTES, 'UTF-8');
 
 } else {
     header("Location: guest.php");
@@ -43,11 +43,13 @@ $all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 $errors = [];
 
 if (isset($_POST['name'])) {
-    $validate_empty = validateSize($_POST['name']);
+    $project_name = trim($_POST['name']);
+    $project_name = htmlspecialchars($project_name, ENT_QUOTES, 'UTF-8');
+    $validate_empty = validateSize($project_name);
 
     if (empty($validate_empty)) {
         // if project with this name already exists
-        $search = ($_POST['name']);
+        $search = $project_name;
         $search = mb_strtolower($search);
 
         $stmt = $con->prepare("SELECT * FROM project WHERE name = ?");
