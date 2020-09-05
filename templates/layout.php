@@ -16,7 +16,7 @@
         <div class="container container--with-sidebar">
             <header class="main-header">
                 <a href="/">
-                    <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+                    <img src="/img/logo_eng.png" width="153" height="42" alt="Логотип Дела в порядке">
                 </a>
 
                 <div class="main-header__side">
@@ -48,7 +48,7 @@
                     <?php endforeach; ?>
 
                     <a class="button button--transparent button--plus content__side-button" href="/add_project.php" target="project_add">Add a new project</a>
-                    <a class="button button--transparent content__side-button" href="/" target="">Edit projects</a>
+                    <a class="button button--transparent content__side-button" href="/edit_project.php" target="">Edit projects</a>
 
                 </section>
 
@@ -117,7 +117,7 @@
 
     <script src="/flatpickr.js"></script>
     <script src="/script.js"></script>
-    <script src="/https://code.jquery.com/jquery-3.5.0.js"></script>
+
 </body>
 
 </html>

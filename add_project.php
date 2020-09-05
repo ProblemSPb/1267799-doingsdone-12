@@ -23,7 +23,7 @@ if (UserHelper::isLoggedIn()) {
 }
 
 // getting projects for left side menu from DB
-$sql_project = "SELECT * FROM project WHERE userID = $userID";
+$sql_project = "SELECT * FROM project WHERE userID = $userID ORDER BY name ASC";
 $sql_result = mysqli_query($con, $sql_project);
 // moving data into a multidimensional array
 $projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
