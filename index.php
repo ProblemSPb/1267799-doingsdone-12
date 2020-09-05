@@ -47,6 +47,7 @@ if (isset($_GET['set_task_status']) && isset($_GET['status'])) {
     $task_id = intval($task_id);
     $status = trim($_GET['status']);
     $status = intval($status);
+    
     if (set_task_status($con, $task_id, $status, $userID)) {
         header("Location: /");
         exit;

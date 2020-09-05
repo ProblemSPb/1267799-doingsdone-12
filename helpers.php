@@ -188,10 +188,10 @@ function count_time_diff($dueDate)
  */
 function set_task_status($con, $task_id, $status, $userID)
 {
-    if ($status === '0') {
-        $status = '1';
+    if ($status === 0) {
+        $status = 1;
     } else {
-        $status = '0';
+        $status = 0;
     }
 
     $sql = "UPDATE task SET status = {$status} WHERE id = {$task_id} AND userID = {$userID}";
