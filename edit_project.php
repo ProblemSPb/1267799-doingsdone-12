@@ -29,10 +29,10 @@ $sql_result = mysqli_query($con, $sql_project);
 $projects = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 
 // getting projects id for validation
-$sql_project_id = "SELECT id FROM project WHERE userID = $userID";
-$sql_result = mysqli_query($con, $sql_project_id);
+$sql_project_dropdown = "SELECT * FROM project WHERE userID = $userID AND id NOT IN (19) ORDER BY name ASC";
+$sql_result = mysqli_query($con, $sql_project_dropdown);
 // moving data into a multidimensional array
-$projects_id = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
+$projects_dropdown = mysqli_fetch_all($sql_result, MYSQLI_ASSOC);
 
 // getting all tasks from DB
 $sql_task = "SELECT task.*, project.name as project_name
@@ -44,12 +44,13 @@ $all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
 $no_tasks = "";
 
+$project_id = $_POST['project'] ?? "";
+$project_id = trim($project_id);
+$project_id = intval($project_id);
+
 $errors = [];
 // if a user fills  in the "New Project Name" field
 if (isset($_POST['rename'])) {
-
-    $project_id = trim($_POST['project']);
-    $project_id = intval($project_id);
 
     $new_project_name = trim($_POST['rename']);
     $new_project_name = htmlspecialchars($new_project_name);
@@ -87,10 +88,34 @@ if (isset($_POST['rename'])) {
     }
 }
 
+
+$delete_button = $_POST['delete'] ?? "";
+// if a user clicks DELETE button
+if ($delete_button) {
+
+    if (isset($_POST['delete_tasks'])) {
+        $sql = "DELETE FROM task WHERE projectID = ?";
+        $stmt = db_get_prepare_stmt($con, $sql, [$project_id]);
+        $result = mysqli_stmt_execute($stmt);
+    } else {
+        $sql = "UPDATE task SET projectID = 19 WHERE projectID = ?";
+        $stmt = db_get_prepare_stmt($con, $sql, [$project_id]);
+        $result = mysqli_stmt_execute($stmt);
+    }
+
+    $sql = "DELETE FROM project WHERE id = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$project_id]);
+    $result = mysqli_stmt_execute($stmt);
+
+    if ($result) {
+        header('Location: index.php');
+    }
+}
+
 $content = include_template(
     'edit_project_templ.php',
     [
-        'projects' => $projects,
+        'projects' => $projects_dropdown,
         'tasks' => $all_tasks,
         'no_tasks' => $no_tasks,
         'errors' => $errors

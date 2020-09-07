@@ -11,17 +11,12 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-
-            <label class="checkbox-2">
-                <input class="checkbox__input visually-hidden show_completed"
-                       type="checkbox">
-                <span class="checkbox__text">Show Tasks in the Project</span>
-            </label>
         </tr>
 
         <tr>
             <div class="form__row-2">
-                <input class="form__input <?= isset($errors['rename']) ? "form__input--error" : ""; ?>" type="text" name="rename"
+                <input class="form__input <?= isset($errors['rename']) ? "form__input--error" : ""; ?>" type="text"
+                       name="rename"
                        id="rename" value="<?= getPOSTValue('rename'); ?>" placeholder="Type new title here">
                 <p class="form__message"><?= $errors['rename'] ?? " "; ?><br></p>
             </div>
@@ -31,28 +26,30 @@
 
     </table>
 
-
-            <label class="checkbox-2">
-                <input class="checkbox__input visually-hidden show_completed"
-                       type="checkbox">
-                <span class="checkbox__text">Purge tasks when deleting the project. If not selected, the tasks from the project will be kept under General project.</span>
-            </label>
+    <label class="checkbox-2">
+        <input class="checkbox__input visually-hidden"
+               type="checkbox" name="delete_tasks">
+        <span class="checkbox__text">Purge tasks when deleting the project. If not selected, the tasks from the project will be kept under General project.</span>
+    </label>
 
     <div class="form__row form__row--controls-2">
         <input class="button" type="submit" name="delete" value="Delete Project">
+        <p class="form__message"><?= $errors['delete'] ?? " "; ?><br></p>
     </div>
 </form>
 
 <div><?= $no_tasks; ?></div>
 
-
-<?php foreach ($tasks as $key => $value):?>
+<?php if (isset($_POST['show_tasks'])) : ?>
+<?php foreach ($tasks as $key => $value): ?>
     <table class="tasks">
         <tr class="tasks__item task <?= (count_time_diff($value['due_date']) <= 1 && $value['due_date'] != NULL) ? 'task--important' : ''; ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input id="<?= $value['id']; ?>" class="checkbox__input visually-hidden task__checkbox task_checker" type="checkbox"
-                           value="<?= $value['id']; ?>" onclick="window.location = '/?set_task_status=<?=$value['id']?>&status=<?=$value['status']?>'" <?= ($value['status']) ? 'checked' : ''; ?>>
+                    <input id="<?= $value['id']; ?>" class="checkbox__input visually-hidden task__checkbox task_checker"
+                           type="checkbox"
+                           value="<?= $value['id']; ?>"
+                           onclick="window.location = '/?set_task_status=<?= $value['id'] ?>&status=<?= $value['status'] ?>'" <?= ($value['status']) ? 'checked' : ''; ?>>
                     <span class="checkbox__text"> <?= $value['name']; ?> </span>
                 </label>
             </td>
@@ -65,3 +62,4 @@
         </tr>
     </table>
 <?php endforeach; ?>
+<?php endif;?>
