@@ -1,6 +1,6 @@
 <h2 class="content__main-heading">Select Project for Editing</h2>
 
-<form class="form-edit" action="/add_project.php" method="post" autocomplete="off" enctype="multipart/form-data">
+<form class="form-edit" action="/edit_project.php" method="post" autocomplete="off" enctype="multipart/form-data">
 
     <table>
         <tr>
@@ -21,15 +21,12 @@
 
         <tr>
             <div class="form__row-2">
-                <input class="form__input <?= isset($errors['name']) ? "form__input--error" : ""; ?>" type="text" name="name"
-                       id="name" value="<?= getPOSTValue('name'); ?>" placeholder="Type new title here">
-                <p class="form__message"><?= $errors['name'] ?? ""; ?></p>
+                <input class="form__input <?= isset($errors['rename']) ? "form__input--error" : ""; ?>" type="text" name="rename"
+                       id="rename" value="<?= getPOSTValue('rename'); ?>" placeholder="Type new title here">
+                <p class="form__message"><?= $errors['rename'] ?? " "; ?><br></p>
             </div>
 
-            <input class="visually-hidden" type="submit" name="rename" value="rename">
-            <label class="button-3 button--transparent" for="file">
-                <span>Rename Project</span>
-            </label>
+            <input class="button button--transparent" type="submit" name="" value="Rename Project">
         </tr>
 
     </table>
@@ -42,7 +39,7 @@
             </label>
 
     <div class="form__row form__row--controls-2">
-        <input class="button" type="submit" name="" value="Delete Project">
+        <input class="button" type="submit" name="delete" value="Delete Project">
     </div>
 </form>
 

@@ -117,42 +117,6 @@ a:focus {
   border-radius: 3px;
 }
 
-.button-2 {
-  display: inline-table;
-  width: 180px;
-  padding: 17px 0;
-  margin-right: 25px;
-
-  font-weight: 700;
-  font-size: 12px;
-  text-align: center;
-  color: #ffffff;
-  text-transform: uppercase;
-  text-decoration: none;
-
-  background-color: #6e45e2;
-  border: 0;
-  border-radius: 3px;
-}
-
-.button-3 {
-  display: inline-table;
-  width: 180px;
-  padding: 17px 0;
-
-
-  font-weight: 700;
-  font-size: 12px;
-  text-align: center;
-  color: #ffffff;
-  text-transform: uppercase;
-  text-decoration: none;
-
-  background-color: #6e45e2;
-  border: 0;
-  border-radius: 3px;
-}
-
 .form__row-2 {
   display: inline-table;
   margin-bottom: 25px;

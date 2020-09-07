@@ -44,12 +44,56 @@ $all_tasks = mysqli_fetch_all($sql_task_result, MYSQLI_ASSOC);
 
 $no_tasks = "";
 
+$errors = [];
+// if a user fills  in the "New Project Name" field
+if (isset($_POST['rename'])) {
+
+    $project_id = trim($_POST['project']);
+    $project_id = intval($project_id);
+
+    $new_project_name = trim($_POST['rename']);
+    $new_project_name = htmlspecialchars($new_project_name);
+    $validate_empty = validateSize($new_project_name);
+
+    // if there are no errors, update the project name in DB
+    if (empty($validate_empty)) {
+        $new_project_name = mb_strtolower($new_project_name);
+
+        // checking if a project with this new name already exists
+        $stmt = $con->prepare("SELECT * FROM project WHERE name = ?");
+        $stmt->bind_param("s", $new_project_name);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $all_rows = $result->fetch_all(MYSQLI_ASSOC);
+        $project_search = $all_rows;
+        $stmt->close();
+
+        if (empty($project_search)) {
+            $sql = "UPDATE project SET name = ? WHERE id = ?";
+            $stmt = db_get_prepare_stmt($con, $sql, [$new_project_name, $project_id]);
+            $result = mysqli_stmt_execute($stmt);
+
+            if ($result) {
+                header('Location: index.php');
+            } else {
+                $errors['rename'] = "Something went wrong. Try again later.";
+            }
+        } else {
+            $errors['rename'] = "Project with this name already exists. Choose another name.";
+        }
+
+    } else {
+        $errors['rename'] = $validate_empty;
+    }
+}
+
 $content = include_template(
     'edit_project_templ.php',
     [
         'projects' => $projects,
         'tasks' => $all_tasks,
-        'no_tasks' => $no_tasks
+        'no_tasks' => $no_tasks,
+        'errors' => $errors
     ]
 );
 
